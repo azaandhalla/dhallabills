@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import TrpcProvider from "@/components/trpc/context";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +31,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <TrpcProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <main>{children}</main>
+          </SidebarProvider>
+        </TrpcProvider>
       </body>
     </html>
   );
