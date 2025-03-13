@@ -1,0 +1,57 @@
+{
+  // Place your taxpal-app workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  "New Form UI": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "nfui",
+    "body": [
+      "import Section from \"../elements/section\";",
+      "import { DynamicFormProps } from \"../Form\";",
+      "import { FormProvider } from \"react-hook-form\";",
+      "import { ${TM_FILENAME_BASE:default} } from \"@azaandhalla/taxpal-types\";",
+      "",
+      "export const Form: React.FC<DynamicFormProps> = ({ initForm }) => {",
+      "const form = initForm({} as ${TM_FILENAME_BASE:default}.Y2023.T2023);",
+      "const { watch } = form;",
+      "",
+      "return (<FormProvider {...form}>",
+      "<Section title=\"General Information\">",
+      "<>",
+      "${TM_FILENAME_BASE:default}${0}",
+      "</>",
+      "</Section>",
+      "</FormProvider>)",
+      "};",
+      "",
+      "export default Form;"
+    ],
+    "description": "Log output to console"
+  },
+  "New Componant": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "nc",
+    "body": [
+      "interface ${TM_FILENAME_BASE/(.*)$/${1:/capitalize}/}Props {",
+      "}",
+      "const ${TM_FILENAME_BASE/(.*)$/${1:/capitalize}/}: React.FC<${TM_FILENAME_BASE/(.*)$/${1:/capitalize}/}Props> = (props) => {",
+      "return (",
+      "<div>",
+      "<>${0}</>",
+      "</div>",
+      ");",
+      "};",
+      "export default ${TM_FILENAME_BASE/(.*)$/${1:/capitalize}/};"
+    ],
+    "description": "Log output to console"
+  },
+  "Temp Var": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "temp",
+    "body": ["const temp = \"${0}\";"],
+    "description": "Log output to console"
+  }
+}
