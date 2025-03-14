@@ -24,12 +24,14 @@ import {
 } from "../ui/dialog";
 import { useState } from "react";
 import { trpc } from "@/libs/trpc";
-import { newAccountSchema } from "@/libs/schema";
+import { Account } from "@prisma/client";
 
 const NewAccount: React.FC = () => {
   const [open, setOpen] = useState(false);
   const utils = trpc.useUtils();
   const { mutateAsync: createAccount } = trpc.account.create.useMutation();
+
+  const newAccountSchema = z.custom<Omit<Account, "id">>();
 
   const form = useForm<z.infer<typeof newAccountSchema>>({
     resolver: zodResolver(newAccountSchema),
@@ -41,7 +43,7 @@ const NewAccount: React.FC = () => {
   });
 
   async function onSubmit(values: z.infer<typeof newAccountSchema>) {
-    await createAccount({ ...values });
+    await createAccount({ account: values });
     utils.account.getAll.invalidate();
     setOpen(false);
   }
