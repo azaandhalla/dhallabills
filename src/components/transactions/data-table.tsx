@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -38,11 +39,11 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  //   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  function getFirstDayOfMonth(date: Date): string {
-    return String(new Date(date.getFullYear(), date.getMonth(), 1));
-  }
+  // function getFirstDayOfMonth(date: Date): string {
+  //   return String(new Date(date.getFullYear(), date.getMonth(), 1));
+  // }
 
   //   function handleColumnFiltersChange(
   //     updaterOrValue: Updater<ColumnFiltersState>
@@ -74,13 +75,13 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
-      //   columnFilters,
+      // columnFilters,
     },
   });
 
   return (
-    <div>
-      <Select
+    <div className="">
+      {/* <Select
         onValueChange={(value) => {
           table.getColumn("postDate")?.setFilterValue(value);
         }}
@@ -93,8 +94,8 @@ export function DataTable<TData, TValue>({
             This Month
           </SelectItem>
         </SelectContent>
-      </Select>
-      <div className="rounded-md border">
+      </Select> */}
+      <div className="rounded-md m-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

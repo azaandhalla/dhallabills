@@ -3,12 +3,14 @@ import { Transaction } from "@prisma/client";
 
 interface TransactionState {
   transactions: Transaction[];
+  filteredTransactions: Transaction[];
   balance: string;
   error: string | null;
 }
 
 const initialState: TransactionState = {
   transactions: [],
+  filteredTransactions: [],
   balance: "0.00",
   error: null,
 };
@@ -21,13 +23,16 @@ const transactionSlice = createSlice({
       state.transactions = action.payload;
       state.balance = calculateBalance(action.payload);
     },
-    setBalance: (state, action: PayloadAction<string>) => {
-      state.balance = action.payload;
+    // setBalance: (state, action: PayloadAction<string>) => {
+    //   state.balance = action.payload;
+    // },
+    setFilteredTransactions: (state, action: PayloadAction<Transaction[]>) => {
+      state.filteredTransactions = action.payload;
     },
   },
 });
 
-export const { setTransactions, setBalance } = transactionSlice.actions;
+export const { setTransactions } = transactionSlice.actions;
 
 const calculateBalance = (transactions: Transaction[]): string => {
   const balance = transactions.reduce((sum, item) => {

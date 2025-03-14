@@ -1,12 +1,11 @@
 import Papa, { ParseResult } from "papaparse";
-import { z } from "zod";
-import { newTransactionSchema } from "@/libs/schema";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
-// interface UploadCsvProps {
-// refetch: () => void;
-// }
+import { trpc } from "@/libs/trpc";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { setTransactions } from "@/store/slices/transactionSlice";
+import { Transaction } from "@prisma/client";
 
 interface RawTransaction {
   [key: string]: string;
@@ -16,8 +15,24 @@ const UploadCsv: React.FC = () => {
   const params = useParams();
   const accountId = params.id as string;
 
-  // const { mutateAsync: createTransaction } =
-  //   trpc.transaction.createMany.useMutation();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [transactions, setCsvTransactions] = useState<
+    Omit<Transaction, "id">[]
+  >([]);
+
+  const { mutateAsync } = trpc.transaction.createMany.useMutation();
+
+  useEffect(() => {
+    async function uploadTransactions() {
+      const response = await mutateAsync({ transactions });
+      dispatch(setTransactions(response));
+    }
+
+    if (transactions.length > 0) {
+      uploadTransactions();
+    }
+  }, [transactions, mutateAsync, accountId, dispatch]);
 
   function changeHandler(event: ChangeEvent<HTMLInputElement>): void {
     if (event.target.files?.item(0)) {
@@ -26,8 +41,7 @@ const UploadCsv: React.FC = () => {
         skipEmptyLines: true,
         dynamicTyping: true,
         async complete(results: ParseResult<RawTransaction>) {
-          const transactions: z.infer<typeof newTransactionSchema>[] = [];
-
+          const transactions: Omit<Transaction, "id">[] = [];
           results.data.forEach((transaction) => {
             transactions.push({
               accountId: accountId,
@@ -40,9 +54,7 @@ const UploadCsv: React.FC = () => {
             });
           });
 
-          // await createTransaction(transactions).finally(() => {
-          //   props.refetch();
-          // });
+          return setCsvTransactions(transactions);
         },
       });
     }

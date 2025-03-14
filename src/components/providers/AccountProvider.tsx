@@ -38,7 +38,7 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mx-16">
       <Overview accountTitle={account.name} balance={balance} />
       <UploadCsv />
       <DataTable columns={columns} data={transactions} />

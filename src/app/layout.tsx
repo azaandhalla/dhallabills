@@ -36,7 +36,7 @@ export default function RootLayout({
           <ReduxProvider>
             <SidebarProvider>
               <AppSidebar />
-              <main>{children}</main>
+              <main className="w-full">{children}</main>
             </SidebarProvider>
           </ReduxProvider>
         </TrpcProvider>

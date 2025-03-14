@@ -1,16 +1,20 @@
 import { router } from "../trpc";
 
 import publicProcedure from "../procedures/public";
-import { newTransactionSchema } from "@/libs/schema";
+import { Transaction } from "@prisma/client";
 import { prisma } from "@/server/db";
 import { z } from "zod";
 
 export const transactionRouter = router({
   transaction: {
     createMany: publicProcedure
-      .input(newTransactionSchema.array())
+      .input(
+        z.object({ transactions: z.custom<Omit<Transaction, "id">>().array() })
+      )
       .mutation(async ({ input }) => {
-        await prisma.transaction.createMany({ data: input });
+        return await prisma.transaction.createManyAndReturn({
+          data: input.transactions,
+        });
       }),
     getAll: publicProcedure.input(z.string()).query(async ({ input }) => {
       const response = await prisma.transaction.findMany({
