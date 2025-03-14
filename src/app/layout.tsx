@@ -4,6 +4,7 @@ import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import TrpcProvider from "@/components/trpc/context";
+import { ReduxProvider } from "@/providers/ReduxProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,10 +33,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <TrpcProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <main>{children}</main>
-          </SidebarProvider>
+          <ReduxProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <main>{children}</main>
+            </SidebarProvider>
+          </ReduxProvider>
         </TrpcProvider>
       </body>
     </html>

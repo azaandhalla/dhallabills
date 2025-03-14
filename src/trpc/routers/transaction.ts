@@ -12,8 +12,11 @@ export const transactionRouter = router({
       .mutation(async ({ input }) => {
         await prisma.transaction.createMany({ data: input });
       }),
-    getAll: publicProcedure.input(z.string()).query(async () => {
-      return await prisma.transaction.findMany({});
+    getAll: publicProcedure.input(z.string()).query(async ({ input }) => {
+      const response = await prisma.transaction.findMany({
+        where: { accountId: input },
+      });
+      return response;
     }),
   },
 });
