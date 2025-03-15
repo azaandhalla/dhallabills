@@ -12,7 +12,7 @@ export const columns: ColumnDef<Transaction>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -20,21 +20,21 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row }) => {
-      return (
-        <div className="text-right font-medium">
-          {formatDate(row.original.post)}
-        </div>
-      );
+      const date = new Date(row.original.post);
+      return date.toLocaleDateString();
     },
   },
   {
     accessorKey: "description",
-    header: () => <div className="text-right">Description</div>,
-    cell: ({ row }) => {
+    header: ({ column }) => {
       return (
-        <div className="text-right font-medium">
-          {row.getValue("description")}
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Description
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       );
     },
   },
@@ -49,14 +49,23 @@ export const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Amount
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      const formatted = new Intl.NumberFormat("en-US", {
+      const amount = parseFloat(row.getValue("amount"));
+      return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(row.original.amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+      }).format(amount);
     },
   },
   //   {
@@ -72,9 +81,16 @@ export const columns: ColumnDef<Transaction>[] = [
   //   },
   {
     accessorKey: "type",
-    header: () => <div className="text-right">Type</div>,
-    cell: ({ row }) => {
-      return <div className="text-right font-medium">{row.original.type}</div>;
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Type
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
   },
 ];

@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Transaction } from "@prisma/client";
+import { SortingState, ColumnFiltersState } from "@tanstack/react-table";
 
 interface TransactionState {
   transactions: Transaction[];
   filteredTransactions: Transaction[];
   balance: string;
   error: string | null;
+  sorting: SortingState;
+  columnFilters: ColumnFiltersState;
 }
 
 const initialState: TransactionState = {
@@ -13,6 +16,8 @@ const initialState: TransactionState = {
   filteredTransactions: [],
   balance: "0.00",
   error: null,
+  sorting: [],
+  columnFilters: [],
 };
 
 const transactionSlice = createSlice({
@@ -29,10 +34,21 @@ const transactionSlice = createSlice({
     setFilteredTransactions: (state, action: PayloadAction<Transaction[]>) => {
       state.filteredTransactions = action.payload;
     },
+    setSorting: (state, action: PayloadAction<SortingState>) => {
+      state.sorting = action.payload;
+    },
+    setColumnFilters: (state, action: PayloadAction<ColumnFiltersState>) => {
+      state.columnFilters = action.payload;
+    },
   },
 });
 
-export const { setTransactions } = transactionSlice.actions;
+export const {
+  setTransactions,
+  setFilteredTransactions,
+  setSorting,
+  setColumnFilters,
+} = transactionSlice.actions;
 
 const calculateBalance = (transactions: Transaction[]): string => {
   const balance = transactions.reduce((sum, item) => {
