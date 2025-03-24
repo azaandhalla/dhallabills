@@ -1,13 +1,19 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, FilterFn } from "@tanstack/react-table";
 import type { Transaction } from "@prisma/client";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 
+declare module "@tanstack/table-core" {
+  interface FilterFns {
+    dateRange: FilterFn<Transaction>;
+  }
+}
+
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "postDate",
+    accessorKey: "post",
     header: ({ column }) => {
       return (
         <Button
@@ -20,9 +26,10 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = new Date(row.original.post);
+      const date = new Date(row.getValue("post"));
       return date.toLocaleDateString();
     },
+    filterFn: "dateRange",
   },
   {
     accessorKey: "description",
@@ -61,24 +68,24 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
+      // const amount = parseFloat(row.original.amount);
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(amount);
+      }).format(row.original.amount);
     },
   },
-  //   {
-  //     accessorKey: "date",
-  //     header: () => <div className="text-right">Transaction Date</div>,
-  //     cell: ({ row }) => {
-  //       return (
-  //         <div className="text-right font-medium">
-  //           {formatDate(row.original.date)}
-  //         </div>
-  //       );
-  //     },
+  // {
+  //   accessorKey: "date",
+  //   header: () => <div className="text-right">Transaction Date</div>,
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="text-right font-medium">
+  //         {formatDate(row.original.date)}
+  //       </div>
+  //     );
   //   },
+  // },
   {
     accessorKey: "type",
     header: ({ column }) => {
@@ -95,10 +102,10 @@ export const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
-}
+// function formatDate(date: Date) {
+//   return date.toLocaleDateString(undefined, {
+//     year: "numeric",
+//     month: "numeric",
+//     day: "numeric",
+//   });
+// }
